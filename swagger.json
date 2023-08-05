@@ -562,19 +562,29 @@
       "type": "object",
       "properties": {
         "id": {
-          "type": "integer"
+          "type": "integer",
+          "description": "The user id.",
+          "example": 1
         },
         "email": {
-          "type": "string"
+          "type": "string",
+          "description": "The user email.",
+          "example": "mail@example.com"
         },
         "gender": {
-          "type": "string"
+          "type": "string",
+          "description": "The user gender.",
+          "example": "male"
         },
         "password": {
-          "type": "string"
+          "type": "string",
+          "description": "The user password.",
+          "example": "password"
         },
         "role": {
-          "type": "string"
+          "type": "string",
+          "description": "The user role.",
+          "example": "Engineer"
         }
       }
     },
@@ -582,10 +592,14 @@
       "type": "object",
       "properties": {
         "email": {
-          "type": "string"
+          "type": "string",
+          "description": "The user email.",
+          "example": "mail@example.com"
         },
         "password": {
-          "type": "string"
+          "type": "string",
+          "description": "The user password.",
+          "example": "password"
         }
       }
     }
