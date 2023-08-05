@@ -1,0 +1,600 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "RestfullAPI & Middleware",
+    "version": "1.0.0",
+    "title": "Rakamin Homework Week 9",
+    "termsOfService": "http://swagger.io/terms/",
+    "contact": {
+      "email": "apiteam@swagger.io"
+    }
+  },
+  "host": "localhost:3000",
+  "tags": [
+    {
+      "name": "auth",
+      "description": "User Authentication"
+    },
+    {
+      "name": "users",
+      "description": "Operations related to users"
+    },
+    {
+      "name": "movies",
+      "description": "Operations related to movies"
+    }
+  ],
+  "schemes": [
+    "http"
+  ],
+  "paths": {
+    "/auth/register": {
+      "post": {
+        "tags": [
+          "auth"
+        ],
+        "summary": "Register a new user.",
+        "description": "Register a new user with the system.",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "user",
+            "description": "The user object to be registered.",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/RegisterUser"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully registered."
+          },
+          "400": {
+            "description": "Bad request. (User already exists, etc.)"
+          }
+        },
+        "consumes": [
+          "application/json"
+        ]
+      }
+    },
+    "/auth/login": {
+      "post": {
+        "tags": [
+          "auth"
+        ],
+        "summary": "Login as a user.",
+        "description": "Authenticate user with username and password.",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "credentials",
+            "description": "The user credentials to log in.",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/LoginCredentials"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully logged in."
+          },
+          "401": {
+            "description": "Unauthorized. (Invalid credentials, etc.)"
+          }
+        },
+        "consumes": [
+          "application/json"
+        ]
+      }
+    },
+    "/users": {
+      "get": {
+        "tags": [
+          "users"
+        ],
+        "summary": "Get a list of users.",
+        "description": "Retrieve a list of users from the database.",
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "An array of users.",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Users"
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized. (No tokens, etc.), you have to login and get your token.",
+            "schema": {
+              "$ref": "#/definitions/UserTokens"
+            }
+          },
+          "403": {
+            "description": "Forbidden. (Invalid token, etc.), you have to login and get your token.",
+            "schema": {
+              "$ref": "#/definitions/UserTokens"
+            }
+          }
+        }
+      }
+    },
+    "/users/{id}": {
+      "get": {
+        "tags": [
+          "users"
+        ],
+        "summary": "Retrieve a single JSONPlaceholder user.",
+        "description": "Retrieve a single JSONPlaceholder user. Can be used to populate a user profile when prototyping or testing an API.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "description": "Numeric ID of the user to retrieve.",
+            "type": "integer"
+          }
+        ],
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A single user.",
+            "schema": {
+              "$ref": "#/definitions/Users"
+            }
+          },
+          "401": {
+            "description": "Unauthorized. (No tokens, etc.), you have to login and get your token.",
+            "schema": {
+              "$ref": "#/definitions/UserTokens"
+            }
+          },
+          "403": {
+            "description": "Forbidden. (Invalid token, etc.), you have to login and get your token.",
+            "schema": {
+              "$ref": "#/definitions/UserTokens"
+            }
+          },
+          "404": {
+            "description": "Not Found. (User not found, etc.)"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "users"
+        ],
+        "summary": "Update a single JSONPlaceholder user.",
+        "description": "Update a single JSONPlaceholder user based on ID.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "description": "Numeric ID of the user to update.",
+            "type": "integer"
+          },
+          {
+            "in": "body",
+            "name": "user",
+            "description": "The user object with updated information.",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UpdateUser"
+            }
+          }
+        ],
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "User updated successfully."
+          },
+          "404": {
+            "description": "User not found."
+          }
+        },
+        "consumes": [
+          "application/json"
+        ]
+      },
+      "delete": {
+        "tags": [
+          "users"
+        ],
+        "summary": "Delete a single JSONPlaceholder user.",
+        "description": "Delete a single JSONPlaceholder user based on ID.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "description": "Numeric ID of the user to delete.",
+            "type": "integer"
+          }
+        ],
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User deleted successfully."
+          },
+          "404": {
+            "description": "User not found."
+          }
+        }
+      }
+    },
+    "/movies": {
+      "get": {
+        "tags": [
+          "movies"
+        ],
+        "summary": "Get a list of movies.",
+        "description": "Retrieve a list of movies from the database.",
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "An array of movies.",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Movies"
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized. (No tokens, etc.), you have to login and get your token.",
+            "schema": {
+              "$ref": "#/definitions/UserTokens"
+            }
+          },
+          "403": {
+            "description": "Forbidden. (Invalid token, etc.), you have to login and get your token.",
+            "schema": {
+              "$ref": "#/definitions/UserTokens"
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "movies"
+        ],
+        "summary": "Create a new movie.",
+        "description": "Add a new movie to the database.",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "movie",
+            "description": "The movie object to be added.",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Movies"
+            }
+          }
+        ],
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Movie created successfully."
+          },
+          "400": {
+            "description": "Bad Request. (Movie Already Exist, etc.)"
+          },
+          "500": {
+            "description": "Internal Server Error. (Wrong Query, etc.)"
+          }
+        },
+        "consumes": [
+          "application/json"
+        ]
+      }
+    },
+    "/movies/{id}": {
+      "get": {
+        "tags": [
+          "movies"
+        ],
+        "summary": "Update a movie.",
+        "description": "Update an existing movie in the database.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "type": "integer",
+            "description": "Numeric ID of the user to retrieve."
+          }
+        ],
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A single movie.",
+            "schema": {
+              "$ref": "#/definitions/Movies"
+            }
+          },
+          "401": {
+            "description": "Unauthorized. (No tokens, etc.), you have to login and get your token.",
+            "schema": {
+              "$ref": "#/definitions/UserTokens"
+            }
+          },
+          "403": {
+            "description": "Forbidden. (Invalid token, etc.), you have to login and get your token.",
+            "schema": {
+              "$ref": "#/definitions/UserTokens"
+            }
+          },
+          "404": {
+            "description": "Not Found. (Movie not found, etc.)"
+          }
+        },
+        "consumes": [
+          "application/json"
+        ]
+      },
+      "put": {
+        "tags": [
+          "movies"
+        ],
+        "summary": "Update a movie.",
+        "description": "Update an existing movie in the database.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "type": "integer",
+            "description": "Numeric ID of the movie to update."
+          },
+          {
+            "in": "body",
+            "name": "movie",
+            "description": "The movie object with updated information.",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UpdateMovie"
+            }
+          }
+        ],
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Movie updated successfully."
+          },
+          "404": {
+            "description": "Movie not found."
+          }
+        },
+        "consumes": [
+          "application/json"
+        ]
+      },
+      "delete": {
+        "tags": [
+          "movies"
+        ],
+        "summary": "Delete a movie.",
+        "description": "Delete an existing movie from the database.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "type": "integer",
+            "description": "Numeric ID of the movie to delete."
+          }
+        ],
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Movie deleted successfully."
+          },
+          "404": {
+            "description": "Movie not found."
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "Users": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "description": "The user ID.",
+          "example": 1
+        },
+        "email": {
+          "type": "string",
+          "description": "The user's email.",
+          "example": "mail@example.com"
+        },
+        "gender": {
+          "type": "string",
+          "description": "The user's gender.",
+          "example": "Female"
+        },
+        "password": {
+          "type": "string",
+          "description": "The user's password.",
+          "example": "password"
+        },
+        "role": {
+          "type": "string",
+          "description": "The user's role.",
+          "example": "Engineer"
+        }
+      }
+    },
+    "UpdateUser": {
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string",
+          "description": "The user email.",
+          "example": "mail@example.com"
+        },
+        "gender": {
+          "type": "string",
+          "description": "The user gender.",
+          "example": "Female"
+        },
+        "password": {
+          "type": "string",
+          "description": "The user's password.",
+          "example": "password"
+        },
+        "role": {
+          "type": "string",
+          "description": "The user role.",
+          "example": "Project Manager"
+        }
+      }
+    },
+    "Movies": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "description": "The user ID.",
+          "example": 1
+        },
+        "title": {
+          "type": "string",
+          "description": "The movie's name.",
+          "example": "The Intern"
+        },
+        "genres": {
+          "type": "string",
+          "description": "The movies's genres.",
+          "example": "Drama"
+        },
+        "year": {
+          "type": "integer",
+          "description": "The year's movie.",
+          "example": 2015
+        }
+      }
+    },
+    "UpdateMovie": {
+      "type": "object",
+      "properties": {
+        "title": {
+          "type": "string",
+          "description": "The movie's name.",
+          "example": "Interstellar"
+        },
+        "genres": {
+          "type": "string",
+          "description": "The movies's genres.",
+          "example": "Sci-Fi"
+        },
+        "year": {
+          "type": "integer",
+          "description": "The year's movie.",
+          "example": 2014
+        }
+      }
+    },
+    "UserTokens": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "string",
+          "description": "User login succesfully",
+          "example": "succes"
+        },
+        "message": {
+          "type": "string",
+          "description": "User login succesfully",
+          "example": "Login succesful."
+        },
+        "key": {
+          "type": "string",
+          "description": "The User token",
+          "example": "eyJhbGciOiJIUzI1NiIsInR5cC..."
+        }
+      }
+    },
+    "RegisterUser": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "email": {
+          "type": "string"
+        },
+        "gender": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        },
+        "role": {
+          "type": "string"
+        }
+      }
+    },
+    "LoginCredentials": {
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        }
+      }
+    }
+  },
+  "securityDefinitions": {
+    "ApiKeyAuth": {
+      "type": "apiKey",
+      "in": "header",
+      "name": "Authorization"
+    }
+  }
+}
